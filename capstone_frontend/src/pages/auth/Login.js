@@ -11,19 +11,7 @@ import { GoogleOutlined, MailOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import axios from "axios";
-
-const createOrUpdateUser = async (authToken) => {
-  return await axios.post(
-    "http://localhost:8000/api/create-or-update-user",
-    {},
-    {
-      headers: {
-        authToken,
-      },
-    }
-  );
-};
+import { createOrUpdateUser } from "../../functions/auth";
 
 const Login = ({ history }) => {
   const dispatch = useDispatch();
@@ -34,6 +22,7 @@ const Login = ({ history }) => {
   useEffect(() => {
     if (user && user.token) history.push("/");
   }, [user]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -42,19 +31,31 @@ const Login = ({ history }) => {
       console.log(result.user);
       const idTokenResult = await result.user.getIdTokenResult();
       createOrUpdateUser(idTokenResult.token)
-        .then((res) => console.log("create or update res", res))
-        .catch();
-      // dispatch({
-      //   type: "LOGGED_IN_USER",
-      //   payload: {
-      //     email: result.user.email,
-      //     token: idTokenResult.token,
-      //   },
-      // });
-      // history.push("/");
+        .then((res) => {
+          dispatch({
+            type: "LOGGED_IN_USER",
+            payload: {
+              name: res.data.name,
+              email: result.user.email,
+              token: idTokenResult.token,
+              role: res.data.role,
+              id: res.data._id,
+            },
+          });
+          roleBaseRedirect(res);
+        })
+        .catch((error) => console.log(error));
     } catch (error) {
       toast.error(error.message);
       setLoading(false);
+    }
+  };
+
+  const roleBaseRedirect = (res) => {
+    if (res.data.role === "admin") {
+      history.push("admin/dashboard");
+    } else {
+      history.push("user/history");
     }
   };
 
@@ -62,14 +63,21 @@ const Login = ({ history }) => {
     await signInWithPopup(auth, new GoogleAuthProvider())
       .then(async (result) => {
         const idTokenResult = await result.user.getIdTokenResult();
-        dispatch({
-          type: "LOGGED_IN_USER",
-          payload: {
-            email: result.user.email,
-            token: idTokenResult.token,
-          },
-        });
-        history.push("/");
+        createOrUpdateUser(idTokenResult.token)
+          .then((res) => {
+            dispatch({
+              type: "LOGGED_IN_USER",
+              payload: {
+                name: res.data.name,
+                email: res.data.email,
+                token: idTokenResult.token,
+                role: res.data.role,
+                id: res.data._id,
+              },
+            });
+            roleBaseRedirect(res);
+          })
+          .catch();
       })
       .catch((error) => {
         toast.error(error);

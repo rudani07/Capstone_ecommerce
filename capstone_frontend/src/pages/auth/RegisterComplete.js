@@ -3,18 +3,20 @@ import { auth } from "../../firebase";
 import { ToastContainer, toast } from "react-toastify";
 import { signInWithEmailLink, updatePassword } from "firebase/auth";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch, useSelector } from "react-redux";
+
+import { createOrUpdateUser } from "../../functions/auth";
 
 const RegisterComplete = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const { user } = useSelector((state) => ({ ...state }));
+  let dispatch = useDispatch();
   useEffect(() => {
     setEmail(window.localStorage.getItem("emailForSignIn"));
   }, []);
 
   const handleSubmit = async (e) => {
-    debugger;
-
     e.preventDefault();
     if (!email || !password) {
       toast.error("email and password is required!");
@@ -36,6 +38,20 @@ const RegisterComplete = ({ history }) => {
         let user = auth.currentUser;
         await updatePassword(user, password);
         const idTokenResult = await user.getIdTokenResult();
+        createOrUpdateUser(idTokenResult.token)
+          .then((res) => {
+            dispatch({
+              type: "LOGGED_IN_USER",
+              payload: {
+                name: res.data.name,
+                email: res.data.email,
+                token: idTokenResult.token,
+                role: res.data.role,
+                id: res.data._id,
+              },
+            });
+          })
+          .catch();
         console.log("user", user, "idTokenResult", idTokenResult);
         history.push("/");
       }

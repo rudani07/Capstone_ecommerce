@@ -13,7 +13,6 @@ const ForgotPassword = ({ history }) => {
     if (user && user.token) history.push("/");
   }, [user]);
   const handleSubmit = async (e) => {
-    debugger;
     e.preventDefault();
     setLoading(true);
 
