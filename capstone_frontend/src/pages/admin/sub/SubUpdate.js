@@ -2,31 +2,41 @@ import React, { useState, useEffect } from "react";
 import AdminNav from "../../../components/nav/AdminNav";
 import { ToastContainer, toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import { getCategory, updateCategory } from "../../../functions/category";
 import CategoryForm from "../../../components/forms/CategoryForm";
+import { getSub, updateSub } from "../../../functions/sub";
+import { getCategories } from "../../../functions/category";
 
-const CategoryUpdate = ({ history, match }) => {
+const SubUpdate = ({ history, match }) => {
   const { user } = useSelector((state) => ({ ...state }));
 
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [parent, setParent] = useState("");
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    loadCategory();
+    loadCategories();
+    loadSubs();
   }, []);
 
-  const loadCategory = () =>
-    getCategory(match.params.slug).then((c) => setName(c.data.name));
+  const loadCategories = () =>
+    getCategories().then((c) => setCategories(c.data));
+
+  const loadSubs = () =>
+    getSub(match.params.slug).then((s) => {
+      setName(s.data.name);
+      setParent(s.data.parent);
+    });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    updateCategory(match.params.slug, { name }, user.token)
+    updateSub(match.params.slug, { name, parent }, user.token)
       .then((res) => {
         setLoading(false);
         setName("");
         toast.success(`"${res.data.name}" is updated`);
-        history.push("/admin/category");
+        history.push("/admin/sub");
       })
       .catch((err) => {
         console.log(err);
@@ -37,8 +47,8 @@ const CategoryUpdate = ({ history, match }) => {
 
   return (
     <div className="container-fluid">
-      <ToastContainer />
       <div className="row">
+        <ToastContainer />
         <div className="col-md-2">
           <AdminNav />
         </div>
@@ -46,20 +56,34 @@ const CategoryUpdate = ({ history, match }) => {
           {loading ? (
             <h4 className="text-danger">Loading..</h4>
           ) : (
-            <h4>Update category</h4>
+            <h4>Update Sub category</h4>
           )}
+          <div className="form-group">
+            <label>Parent Category</label>
+            <select
+              name="category"
+              className="form-control"
+              onChange={(e) => setParent(e.target.value)}
+            >
+              <option>Please select</option>
+              {categories.length > 0 &&
+                categories.map((c) => (
+                  <option key={c._id} value={c._id} selected={c._id === parent}>
+                    {c.name}
+                  </option>
+                ))}
+            </select>
+          </div>
 
           <CategoryForm
             handleSubmit={handleSubmit}
             name={name}
             setName={setName}
           />
-
-          <hr />
         </div>
       </div>
     </div>
   );
 };
 
-export default CategoryUpdate;
+export default SubUpdate;
