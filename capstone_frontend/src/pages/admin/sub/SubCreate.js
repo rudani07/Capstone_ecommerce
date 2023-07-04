@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import CategoryForm from "../../../components/forms/CategoryForm";
 import LocalSearch from "../../../components/forms/LocalSearch";
-import { createSub, getSub, getSubs, removeSub } from "../../../functions/sub";
+import { createSub, getSubs, removeSub } from "../../../functions/sub";
 import { getCategories } from "../../../functions/category";
 
 const SubCreate = () => {
