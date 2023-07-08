@@ -3,7 +3,6 @@ const slugify = require("slugify");
 
 exports.create = async (req, res) => {
   try {
-    console.log(req.body);
     req.body.slug = slugify(req.body.title);
     const newProduct = await new Product(req.body).save();
     res.json(newProduct);
@@ -15,7 +14,65 @@ exports.create = async (req, res) => {
   }
 };
 
-exports.read = async (req, res) => {
-  let products = await Product.find({});
+exports.listAll = async (req, res) => {
+  let products = await Product.find({})
+    .limit(parseInt(req.params.count))
+    .populate("category")
+    .populate("subs")
+    .sort([["createdAt", "desc"]])
+    .exec();
   res.json(products);
+};
+
+exports.remove = async (req, res) => {
+  try {
+    const deleted = await Product.findOneAndRemove({
+      slug: req.params.slug,
+    }).exec();
+    res.json(deleted);
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+};
+
+exports.read = async (req, res) => {
+  try {
+    let product = await Product.findOne({ slug: req.params.slug })
+      .populate("category")
+      .populate("subs")
+      .exec();
+
+    res.json(product);
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+};
+
+exports.update = async (req, res) => {
+  try {
+    let updated = await Product.findOneAndUpdate(
+      { slug: req.params.slug },
+      req.body,
+      { new: true }
+    ).exec();
+
+    res.json(updated);
+  } catch (err) {
+    return res.status(400).json({ err: err.message });
+  }
+};
+
+exports.list = async (req, res) => {
+  try {
+    const { sort, order, limit } = req.body;
+    const products = await Product.find({})
+      .populate("category")
+      .populate("subs")
+      .sort([[sort, order]])
+      .limit(limit)
+      .exec();
+    res.json(products);
+  } catch (err) {
+    console.log(err);
+  }
 };
