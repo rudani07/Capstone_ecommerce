@@ -1,6 +1,7 @@
 const Category = require("../models/category");
 const slugify = require("slugify");
 const Sub = require("../models/sub");
+const Product = require("../models/product");
 
 exports.create = async (req, res) => {
   try {
@@ -15,7 +16,25 @@ exports.list = async (req, res) =>
   res.json(await Category.find({}).sort({ createdAt: -1 }).exec());
 
 exports.read = async (req, res) => {
-  res.json(await Category.findOne({ slug: req.params.slug }).exec());
+  try {
+    let category = await Category.findOne({ slug: req.params.slug }).exec();
+
+    if (!category) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+
+    const products = await Product.find({ category })
+      .populate("category")
+      .exec();
+
+    res.json({
+      category,
+      products,
+    });
+  } catch (error) {
+    console.error("Error fetching category and products:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 exports.update = async (req, res) => {

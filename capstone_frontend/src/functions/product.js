@@ -27,3 +27,32 @@ export const updateProduct = async (slug, product, authtoken) =>
       authtoken,
     },
   });
+
+export const getProducts = async (sort, order, page) =>
+  await axios.post(`http://localhost:8000/api/products`, {
+    sort,
+    order,
+    page,
+  });
+
+export const getProductsCount = async () => {
+  return await axios.get(`http://localhost:8000/api/products/total`);
+};
+export const productStar = async (productId, star, authtoken) =>
+  await axios.put(
+    `http://localhost:8000/api/product/star/${productId}`,
+    { star },
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  );
+export const getRelated = async (productId) => {
+  return await axios.get(
+    `http://localhost:8000/api/product/related/${productId}`
+  );
+};
+
+export const fetchProductsByFilter = async (arg) =>
+  await axios.post(`http://localhost:8000/api/search/filters`, arg);
