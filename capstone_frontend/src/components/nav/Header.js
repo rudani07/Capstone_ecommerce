@@ -6,8 +6,9 @@ import {
   SettingOutlined,
   AppstoreOutlined,
   ShoppingOutlined,
+  ShoppingCartOutlined,
 } from "@ant-design/icons";
-import { Menu } from "antd";
+import { Badge, Menu } from "antd";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -18,7 +19,7 @@ const { SubMenu, Item } = Menu;
 
 const Header = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => ({ ...state }));
+  const { user, cart } = useSelector((state) => ({ ...state }));
   const history = useHistory();
   const logout = async () => {
     try {
@@ -49,7 +50,16 @@ const Header = () => {
         <Link to="/">Home</Link>
       </Item>
       <Item key="shop" icon={<ShoppingOutlined />}>
-        <Link to="/shop">Shop</Link>
+        <Link to="/shop">
+          <Badge>Shop</Badge>
+        </Link>
+      </Item>
+      <Item key="cart" icon={<ShoppingCartOutlined />}>
+        <Link to="/cart">
+          <Badge count={cart.length} offset={[9, 0]}>
+            Cart
+          </Badge>
+        </Link>
       </Item>
 
       {!user && (

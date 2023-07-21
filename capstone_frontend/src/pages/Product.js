@@ -8,7 +8,6 @@ const Product = ({ match }) => {
   const [related, setRelated] = useState([]);
   const [star, setStar] = useState(0);
   const { user } = useSelector((state) => ({ ...state }));
-
   const { slug } = match.params;
 
   useEffect(() => {
@@ -27,7 +26,6 @@ const Product = ({ match }) => {
   const loadSingleProduct = () => {
     getProduct(slug).then((res) => {
       setProduct(res.data);
-      // load related
       getRelated(res.data._id).then((res) => setRelated(res.data));
     });
   };

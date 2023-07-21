@@ -274,10 +274,11 @@ const handleBrand = async (req, res, brand) => {
 exports.searchFilters = async (req, res) => {
   const { query, price, category, stars, sub, shipping, color, brand } =
     req.body;
+  console.log(req.body);
 
   if (query) {
     console.log("query --->", query);
-    await handleQuery(req, res, query);
+    handleQuery(req, res, query);
   }
 
   // price [20, 200]

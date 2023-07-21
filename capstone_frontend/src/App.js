@@ -26,6 +26,10 @@ import Product from "./pages/Product";
 import CategoryHome from "./pages/category/CategoryHome";
 import SubHome from "./pages/sub/SubHome";
 import Shop from "./pages/Shop";
+import { ToastContainer } from "react-toastify";
+import Cart from "./pages/Cart";
+import SideDrawer from "./components/drawer/SideDrawer";
+import Checkout from "./pages/Checkout";
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -52,18 +56,18 @@ const App = () => {
     return () => unsubscribe();
   }, []);
   return (
-    <div>
+    <>
       <Header />
+      <SideDrawer />
+      <ToastContainer />
       <Switch>
         <Route exact path="/" component={Home} />
+        <Route exact path="/shop" component={Shop} />
+        <Route exact path="/cart" component={Cart} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/register" component={Register} />
         <Route exact path="/register/complete" component={RegisterComplete} />
         <Route exact path="/forgot/password" component={ForgotPassword} />
-        <Route exact path="/product/:slug" component={Product} />
-        <Route exact path="/category/:slug" component={CategoryHome} />
-        <Route exact path="/sub/:slug" component={SubHome} />
-        <Route exact path="/shop" component={Shop} />
         <UserRoute exact path="/user/history" component={History} />
         <UserRoute exact path="/user/password" component={Password} />
         <UserRoute exact path="/user/wishlist" component={Wishlist} />
@@ -74,8 +78,8 @@ const App = () => {
           path="/admin/category/:slug"
           component={CategoryUpdate}
         />
-        <AdminRoute exact path="/admin/sub/:slug" component={SubUpdate} />
         <AdminRoute exact path="/admin/sub" component={SubCreate} />
+        <AdminRoute exact path="/admin/sub/:slug" component={SubUpdate} />
         <AdminRoute exact path="/admin/product" component={ProductCreate} />
         <AdminRoute exact path="/admin/products" component={AllProducts} />
         <AdminRoute
@@ -83,8 +87,12 @@ const App = () => {
           path="/admin/product/:slug"
           component={ProductUpdate}
         />
+        <Route exact path="/product/:slug" component={Product} />
+        <Route exact path="/category/:slug" component={CategoryHome} />
+        <Route exact path="/sub/:slug" component={SubHome} />
+        <UserRoute exact path="/checkout" component={Checkout} />
       </Switch>
-    </div>
+    </>
   );
 };
 
