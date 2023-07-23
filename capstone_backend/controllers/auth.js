@@ -8,12 +8,9 @@ exports.createOrUpdateUser = async (req, res) => {
     { new: true }
   );
   if (user) {
-    res.json(user);
     console.log("USER UPDATED", user);
+    res.json(user);
   } else {
-    res.json({
-      data: "hey you hit node API",
-    });
     const newUser = await new User({
       email,
       name: email.split("@")[0],

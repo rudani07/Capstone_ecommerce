@@ -15,6 +15,7 @@ const Cart = ({ history }) => {
   };
 
   const saveOrderToDb = () => {
+    // console.log("cart", JSON.stringify(cart, null, 4));
     userCart(cart, user.token)
       .then((res) => {
         console.log("CART POST RES", res);
@@ -22,6 +23,7 @@ const Cart = ({ history }) => {
       })
       .catch((err) => console.log("cart save err", err));
   };
+
   const showCartItems = () => (
     <table className="table table-bordered">
       <thead className="thead-light">
