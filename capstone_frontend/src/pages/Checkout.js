@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import {
   getUserCart,
   emptyUserCart,
@@ -43,7 +43,7 @@ const Checkout = ({ history }) => {
       setTotal(0);
       setTotalAfterDiscount(0);
 
-      toast.success("Cart is emapty. Contniue shopping.");
+      toast.success("Cart is empty. Continue shopping.");
     });
   };
 
@@ -56,11 +56,12 @@ const Checkout = ({ history }) => {
     });
   };
   const applyDiscountCoupon = () => {
+    debugger;
     console.log("send coupon to backend", coupon);
     applyCoupon(user.token, coupon).then((res) => {
       console.log("RES ON COUPON APPLIED", res.data);
       if (res.data) {
-        setTotalAfterDiscount(res.data);
+        setTotalAfterDiscount(res.data.totalAfterDiscount);
         dispatch({
           type: "COUPON_APPLIED",
           payload: true,
@@ -132,6 +133,7 @@ const Checkout = ({ history }) => {
         {showProductSummary()}
         <hr />
         <p>Cart Total: {total}</p>
+        {console.log(totalAfterDiscount, "totalAfterDiscount")}
         {totalAfterDiscount > 0 && (
           <p className="bg-success p-2">
             Discount Applied:Total Payable: {totalAfterDiscount}
