@@ -1,3 +1,4 @@
+import { CODReducer } from "./CODReducer.js";
 import { cartReducer } from "./cartReducer.js";
 import { couponReducer } from "./couponReducer.js";
 import { drawerReducer } from "./drawerReducer.js";
@@ -11,6 +12,7 @@ export const rootReducer = combineReducers({
   cart: cartReducer,
   drawer: drawerReducer,
   coupon: couponReducer,
+  COD: CODReducer,
 });
 
 export default rootReducer;
