@@ -26,7 +26,6 @@ const ProductCardInCheckout = ({ p }) => {
         }
       });
 
-      //  console.log('cart udpate color', cart)
       localStorage.setItem("cart", JSON.stringify(cart));
       dispatch({
         type: "ADD_TO_CART",

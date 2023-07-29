@@ -32,7 +32,6 @@ const RegisterComplete = ({ history }) => {
         email,
         window.location.href
       );
-      console.log(result);
       if (result.user.emailVerified) {
         window.localStorage.removeItem("emailForSignIn");
         let user = auth.currentUser;
@@ -52,7 +51,6 @@ const RegisterComplete = ({ history }) => {
             });
           })
           .catch();
-        console.log("user", user, "idTokenResult", idTokenResult);
         history.push("/");
       }
     } catch (error) {

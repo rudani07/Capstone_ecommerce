@@ -1,8 +1,8 @@
 const cloudinary = require("cloudinary");
 cloudinary.config({
-  cloud_name: "datilseem",
-  api_key: "169648869596258",
-  api_secret: "HV5Ji5BYz7q-i28c_XS0CCj2Rb4",
+  cloud_name: `${process.env.CLOUDINARY_NAME}`,
+  api_key: `${process.env.CLOUDINARY_API_KEY}`,
+  api_secret: `${process.env.CLOUDINARY_API_SECRET}`,
 });
 exports.upload = async (req, res) => {
   let result = await cloudinary.uploader.upload(req.body.image, {

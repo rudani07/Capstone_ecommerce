@@ -3,9 +3,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import StripeCheckout from "../components/StripeCheckout";
 import "../stripe.css";
-const APP_STRIPE_KEY =
-  "pk_test_51NX4kpHevWicPNmpHwlLOg9gCHEHMEKZXtb6s6amg3f5KBcC9Sn6n7cVLRRUqOwKANIEO4BKSRzySfhEfERZ0jM200MfrX3FUm";
-const promise = loadStripe(APP_STRIPE_KEY);
+const promise = loadStripe(`${process.env.REACT_APP_SECRET_STRIPE_KEY}`);
 
 const Payment = () => {
   return (

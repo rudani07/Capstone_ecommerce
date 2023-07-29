@@ -121,7 +121,7 @@ const ProductCreateForm = ({
       </div>
 
       {showSub && (
-        <div>
+        <div className="form-group">
           <label>Sub Categories</label>
           <Select
             mode="multiple"

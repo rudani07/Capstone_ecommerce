@@ -48,7 +48,6 @@ const Login = ({ history }) => {
     setLoading(true);
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
-      console.log(result.user);
       const idTokenResult = await result.user.getIdTokenResult();
       createOrUpdateUser(idTokenResult.token)
         .then((res) => {

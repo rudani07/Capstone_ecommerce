@@ -11,7 +11,7 @@ const FileUpload = ({ values, setValues, setLoading }) => {
     setLoading(true);
     axios
       .post(
-        `http://localhost:8000/api/removeimages`,
+        `${process.env.REACT_APP_API}/removeimages`,
         { public_id: id },
         {
           headers: {
@@ -50,7 +50,7 @@ const FileUpload = ({ values, setValues, setLoading }) => {
           (uri) => {
             axios
               .post(
-                `http://localhost:8000/api/uploadimages`,
+                `${process.env.REACT_APP_API}/uploadimages`,
                 { image: uri },
                 {
                   headers: {
@@ -59,7 +59,6 @@ const FileUpload = ({ values, setValues, setLoading }) => {
                 }
               )
               .then((res) => {
-                console.log("IMAGE UPLOAD RES DATA", res);
                 setLoading(false);
                 allUploadedFiles.push(res.data);
 

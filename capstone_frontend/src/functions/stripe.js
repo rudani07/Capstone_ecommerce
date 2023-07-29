@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const createPaymentIntent = (authtoken, coupon) =>
   axios.post(
-    `http://localhost:8000/api/create-payment-intent`,
+    `${process.env.REACT_APP_API}/create-payment-intent`,
     { couponApplied: coupon },
     {
       headers: {

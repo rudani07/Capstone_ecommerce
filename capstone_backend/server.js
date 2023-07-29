@@ -10,13 +10,10 @@ const authRoutes = require("./routes/auth");
 const app = express();
 
 mongoose
-  .connect(
-    "mongodb+srv://vaibhav:vaibhav@ecommerce.enebadn.mongodb.net/capstone?retryWrites=true&w=majority",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
+  .connect(`${process.env.MONGO_URL}`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("DATABASE CONNECTED"))
   .catch((err) => console.log("DATABASE CONNECTION ERR", err));
 

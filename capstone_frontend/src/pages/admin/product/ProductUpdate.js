@@ -49,14 +49,12 @@ const ProductUpdate = ({ match, history }) => {
       p.data.subs.map((s) => {
         arr.push(s._id);
       });
-      console.log("ARR", arr);
       setArrayOfSubs((prev) => arr);
     });
   };
 
   const loadCategories = () =>
     getCategories().then((c) => {
-      console.log("GET CATEGORIES IN UPDATE PRODUCT", c.data);
       setCategories(c.data);
     });
 
@@ -83,11 +81,8 @@ const ProductUpdate = ({ match, history }) => {
 
   const handlecategoryChange = (e) => {
     e.preventDefault();
-    console.log("CLICKED CATEGORY", e.target.value);
-    setValues({ ...values, subs: [] });
     setSelectedCategory(e.target.value);
     getCategorySubs(e.target.value).then((res) => {
-      console.log("SUB OPTIONS ON CATGORY CLICK", res);
       setSubOptions(res.data);
     });
     if (values.category._id === e.target.value) {

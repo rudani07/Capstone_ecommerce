@@ -3,8 +3,9 @@ import { Switch, Route } from "react-router-dom";
 import { auth } from "./firebase";
 import { useDispatch } from "react-redux";
 import { currentUser } from "./functions/auth";
-import { ToastContainer } from "react-toastify";
 import { LoadingOutlined } from "@ant-design/icons";
+import "react-toastify/dist/ReactToastify.css";
+
 const Login = lazy(() => import("./pages/auth/Login"));
 const Register = lazy(() => import("./pages/auth/Register"));
 const Home = lazy(() => import("./pages/Home"));
@@ -45,7 +46,6 @@ const App = () => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         const idTokenResult = await user.getIdTokenResult();
-        console.log("user", user);
         currentUser(idTokenResult.token)
           .then((res) => {
             dispatch({
@@ -76,7 +76,6 @@ const App = () => {
     >
       <Header />
       <SideDrawer />
-      <ToastContainer />
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/shop" component={Shop} />

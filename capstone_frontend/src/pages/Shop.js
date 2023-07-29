@@ -51,9 +51,7 @@ const Shop = () => {
 
   useEffect(() => {
     loadAllProducts();
-    // fetch categories
     getCategories().then((res) => setCategories(res.data));
-    // fetch subcategories
     getSubs().then((res) => setSubs(res.data));
   }, []);
 
@@ -63,7 +61,6 @@ const Shop = () => {
     });
   };
 
-  // 1. load products by default on page load
   const loadAllProducts = () => {
     getProductsByCount(12).then((p) => {
       setProducts(p.data);
@@ -71,7 +68,6 @@ const Shop = () => {
     });
   };
 
-  // 2. load products on user search input
   useEffect(() => {
     const delayed = setTimeout(() => {
       fetchProducts({ query: text });
@@ -82,7 +78,6 @@ const Shop = () => {
     return () => clearTimeout(delayed);
   }, [text]);
 
-  // 3. load products based on price range
   useEffect(() => {
     console.log("ok to request");
     fetchProducts({ price });
@@ -94,7 +89,6 @@ const Shop = () => {
       payload: { text: "" },
     });
 
-    // reset
     setCategoryIds([]);
     setPrice(value);
     setStar("");
@@ -107,8 +101,6 @@ const Shop = () => {
     }, 300);
   };
 
-  // 4. load products based on category
-  // show categories in a list of checkbox
   const showCategories = () =>
     categories.map((c) => (
       <div key={c._id}>
@@ -125,9 +117,7 @@ const Shop = () => {
       </div>
     ));
 
-  // handle check for categories
   const handleCheck = (e) => {
-    // reset
     dispatch({
       type: "SEARCH_QUERY",
       payload: { text: "" },
@@ -138,27 +128,21 @@ const Shop = () => {
     setBrand("");
     setColor("");
     setShipping("");
-    // console.log(e.target.value);
     let inTheState = [...categoryIds];
     let justChecked = e.target.value;
-    let foundInTheState = inTheState.indexOf(justChecked); // index or -1
+    let foundInTheState = inTheState.indexOf(justChecked);
 
-    // indexOf method ?? if not found returns -1 else return index [1,2,3,4,5]
     if (foundInTheState === -1) {
       inTheState.push(justChecked);
     } else {
-      // if found pull out one item from index
       inTheState.splice(foundInTheState, 1);
     }
 
     setCategoryIds(inTheState);
-    // console.log(inTheState);
     fetchProducts({ category: inTheState });
   };
 
-  // 5. show products by star rating
   const handleStarClick = (num) => {
-    // console.log(num);
     dispatch({
       type: "SEARCH_QUERY",
       payload: { text: "" },
@@ -183,7 +167,6 @@ const Shop = () => {
     </div>
   );
 
-  // 6. show products by sub category
   const showSubs = () =>
     subs.map((s) => (
       <div
@@ -197,7 +180,6 @@ const Shop = () => {
     ));
 
   const handleSub = (sub) => {
-    // console.log("SUB", sub);
     setSub(sub);
     dispatch({
       type: "SEARCH_QUERY",
@@ -212,7 +194,6 @@ const Shop = () => {
     fetchProducts({ sub });
   };
 
-  // 7. show products based on brand name
   const showBrands = () =>
     brands.map((b) => (
       <Radio
@@ -242,7 +223,6 @@ const Shop = () => {
     fetchProducts({ brand: e.target.value });
   };
 
-  // 8. show products based on color
   const showColors = () =>
     colors.map((c) => (
       <Radio
@@ -272,7 +252,6 @@ const Shop = () => {
     fetchProducts({ color: e.target.value });
   };
 
-  // 9. show products based on shipping yes/no
   const showShipping = () => (
     <>
       <Checkbox
@@ -321,7 +300,6 @@ const Shop = () => {
             defaultOpenKeys={["1", "2", "3", "4", "5", "6", "7"]}
             mode="inline"
           >
-            {/* price */}
             <SubMenu
               key="1"
               title={
@@ -342,7 +320,6 @@ const Shop = () => {
               </div>
             </SubMenu>
 
-            {/* category */}
             <SubMenu
               key="2"
               title={
@@ -354,7 +331,6 @@ const Shop = () => {
               <div style={{ maringTop: "-10px" }}>{showCategories()}</div>
             </SubMenu>
 
-            {/* stars */}
             <SubMenu
               key="3"
               title={
@@ -366,7 +342,6 @@ const Shop = () => {
               <div style={{ maringTop: "-10px" }}>{showStars()}</div>
             </SubMenu>
 
-            {/* sub category */}
             <SubMenu
               key="4"
               title={
@@ -380,7 +355,6 @@ const Shop = () => {
               </div>
             </SubMenu>
 
-            {/* brands */}
             <SubMenu
               key="5"
               title={
@@ -394,7 +368,6 @@ const Shop = () => {
               </div>
             </SubMenu>
 
-            {/* colors */}
             <SubMenu
               key="6"
               title={
@@ -408,7 +381,6 @@ const Shop = () => {
               </div>
             </SubMenu>
 
-            {/* shipping */}
             <SubMenu
               key="7"
               title={

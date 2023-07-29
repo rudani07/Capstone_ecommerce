@@ -8,9 +8,9 @@ import { getCategories, getCategorySubs } from "../../../functions/category";
 import FileUpload from "../../../components/forms/FileUpload";
 import { LoadingOutlined } from "@ant-design/icons";
 const initialState = {
-  title: "Mac book pro",
-  description: "this is mehngha biju le ",
-  price: "4000",
+  title: "",
+  description: "",
+  price: "",
   categories: [],
   category: "",
   subs: [],
@@ -53,11 +53,9 @@ const ProductCreate = () => {
 
   const handleCategoryChange = async (e) => {
     e.preventDefault();
-    console.log("CLICKED CATEGORY", e.target.value);
     setValues({ ...values, subs: [], category: e.target.value });
 
     getCategorySubs(e.target.value).then((res) => {
-      console.log("SUB OPTIONS ON CATGORY CLICK", res);
       setSubOptions(res.data);
     });
     setShowSub(true);
